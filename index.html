@@ -7,7 +7,7 @@
 <meta name="description" content="Сколько ПТС ты апнул за день, неделю и месяц — вставь ссылку на Dotabuff.">
 <style>
 :root{
-  --bg:#1a1613; --panel:rgba(36,31,26,.78); --panel2:rgba(45,39,33,.85); --line:rgba(120,98,80,.35);
+  --bg:#1a1613; --panel:rgba(36,31,26,.84); --panel2:rgba(45,39,33,.88); --line:rgba(120,98,80,.35);
   --text:#f3eade; --muted:#a8988a; --accent:#d97757; --accent2:#e9a27f;
   --win:#8fc27d; --lose:#e5665a; --radius:14px;
 }
@@ -35,7 +35,7 @@ button:disabled{opacity:.5;cursor:default}
 .layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:14px;align-items:start}
 .col{display:flex;flex-direction:column;gap:12px;min-width:0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:14px;
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 8px 30px rgba(0,0,0,.25)}
+  box-shadow:0 8px 30px rgba(0,0,0,.25)}
 h2{font-size:12px;margin:0 0 10px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.8px}
 .muted{color:var(--muted)}
 
@@ -148,7 +148,7 @@ body{overflow-x:hidden}
 @keyframes inR{from{opacity:0;transform:translateX(70px)}to{opacity:1;transform:none}}
 @keyframes inU{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
 @keyframes grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-.a-l,.a-r,.a-u{animation:.65s cubic-bezier(.2,.8,.2,1) var(--d,20ms) both}
+.a-l,.a-r,.a-u{animation:.65s cubic-bezier(.2,.8,.2,1) var(--d,0ms) both}
 .a-l{animation-name:inL}
 .a-r{animation-name:inR}
 .a-u{animation-name:inU}
@@ -158,16 +158,72 @@ body{overflow-x:hidden}
 
 /* светящиеся пятна на фоне */
 .glow{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.glow span{position:absolute;left:0;top:0;border-radius:50%;filter:blur(30px);mix-blend-mode:screen;will-change:transform;
-  background:radial-gradient(circle,rgba(240,170,135,.75) 0%,rgba(217,119,87,.38) 32%,rgba(217,119,87,.12) 55%,transparent 72%);
-  animation:pulse 7s ease-in-out infinite}
-.glow span:nth-child(1){width:min(560px,95vw);height:min(560px,95vw)}
-.glow span:nth-child(2){width:min(440px,80vw);height:min(440px,80vw);animation-duration:9s;animation-delay:-2s}
-.glow span:nth-child(3){width:min(620px,100vw);height:min(620px,100vw);animation-duration:8s;animation-delay:-4s}
-.glow span:nth-child(4){width:min(300px,60vw);height:min(300px,60vw);animation-duration:6s;animation-delay:-1s}
-.glow span:nth-child(5){width:min(360px,70vw);height:min(360px,70vw);animation-duration:10s;animation-delay:-5s}
-@keyframes pulse{0%,100%{opacity:.75}50%{opacity:1}}
+.glow span{position:absolute;left:0;top:0;border-radius:50%;will-change:transform,opacity;
+  background:radial-gradient(circle,rgba(240,170,135,.62) 0%,rgba(225,135,100,.34) 24%,rgba(217,119,87,.16) 45%,rgba(217,119,87,.05) 62%,transparent 74%);
+  animation:pulse 16s ease-in-out infinite}
+.glow span:nth-child(1){width:min(620px,105vw);height:min(620px,105vw)}
+.glow span:nth-child(2){width:min(500px,90vw);height:min(500px,90vw);animation-duration:21s;animation-delay:-5s}
+.glow span:nth-child(3){width:min(680px,110vw);height:min(680px,110vw);animation-duration:19s;animation-delay:-9s}
+.glow span:nth-child(4){width:min(360px,70vw);height:min(360px,70vw);animation-duration:14s;animation-delay:-3s}
+.glow span:nth-child(5){width:min(420px,80vw);height:min(420px,80vw);animation-duration:23s;animation-delay:-12s}
+@keyframes pulse{0%,100%{opacity:.7}50%{opacity:1}}
 .wrap{position:relative;z-index:1}
+
+/* вкладки */
+.tabs{display:flex;gap:4px;margin:2px 0 12px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;width:fit-content;max-width:100%}
+.tab{background:transparent;color:var(--muted);padding:9px 16px;border-radius:10px;font-weight:600;white-space:nowrap}
+.tab:hover{background:var(--panel2);color:var(--text)}
+.tab.active,.tab.active:hover{background:var(--accent);color:#1a1613}
+
+/* подробное сравнение */
+:root{--pa:#d97757;--pb:#7fb6c9}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:1px}
+.dot.a{background:var(--pa)} .dot.b{background:var(--pb)}
+.vsbanner{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:14px;align-items:center;margin-bottom:12px}
+.vsp{display:flex;align-items:center;gap:12px;min-width:0}
+.vsp.r{flex-direction:row-reverse;text-align:right}
+.vsp > div{min-width:0}
+.vsp img{width:60px;height:60px;border-radius:12px;background:var(--panel2);flex:none}
+.vsp .nm{font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vsp .chip{display:inline-block;margin-top:5px}
+.vsscore{text-align:center}
+.vsscore .sc{font:800 36px/1 Georgia,"Times New Roman",serif;font-variant-numeric:tabular-nums}
+.verdict{grid-column:1/-1;text-align:center;border-top:1px solid var(--line);padding-top:10px;font-size:13px}
+.duel{display:grid;grid-template-columns:76px minmax(0,1fr) 128px minmax(0,1fr) 76px;gap:8px;align-items:center;
+  padding:7px 0;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.duel:last-child{border-bottom:0}
+.duel .v{font-weight:700;white-space:nowrap}
+.duel .v.l{text-align:right}
+.duel .v.best{color:var(--win)}
+.duel .v small{font-weight:500;color:var(--muted);font-size:11px}
+.duel .lab{text-align:center;color:var(--muted);font-size:12px;line-height:1.25}
+.duel .lab small{display:block;font-size:10.5px;opacity:.8}
+.dbar{height:8px;border-radius:4px;background:var(--panel2);position:relative;overflow:hidden}
+.dbar i{position:absolute;top:0;bottom:0;border-radius:4px;animation:growX .8s cubic-bezier(.2,.8,.2,1) .25s both}
+.dbar.l i{right:0;background:var(--pa);transform-origin:100% 50%}
+.dbar.r i{left:0;background:var(--pb);transform-origin:0 50%}
+@keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-bottom:6px}
+.draw{stroke-dasharray:1;animation:draw 1.8s ease-out .25s both}
+@keyframes draw{from{stroke-dashoffset:1}to{stroke-dashoffset:0}}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.two h3,.subh{font-size:13px;margin:0 0 6px;font-weight:700}
+.subh{margin-top:14px}
+.mini{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);font-size:12.5px;font-variant-numeric:tabular-nums}
+.mini:last-child{border-bottom:0}
+.mini img{width:44px;height:25px;border-radius:4px;object-fit:cover;background:var(--panel2);flex:none}
+.mini .n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.mini .p{font-weight:800;min-width:38px;text-align:right}
+.cm{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center;padding:8px 4px;
+  border-bottom:1px solid var(--line);color:inherit;text-decoration:none;border-radius:8px;font-variant-numeric:tabular-nums}
+.cm:last-child{border-bottom:0}
+a.cm:hover{background:var(--panel2)}
+.cm .side{display:flex;align-items:center;gap:8px;min-width:0;font-size:12px}
+.cm .side.r{flex-direction:row-reverse;text-align:right}
+.cm .side img{width:48px;height:27px;border-radius:5px;object-fit:cover;background:var(--panel2);flex:none}
+.cm .side span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cm .mid{text-align:center;font-size:12px}
+.cm .mid img{width:44px;height:25px;border-radius:4px;object-fit:cover;background:var(--panel2);display:block;margin:0 auto 2px}
 
 @media (max-width:960px){
   .layout,.cmpgrid{grid-template-columns:1fr}
@@ -180,10 +236,22 @@ body{overflow-x:hidden}
   .medal{margin-left:0;width:100%;text-align:left;flex-direction:row-reverse;justify-content:flex-end}
   .search{flex-direction:column;min-width:0;width:100%;flex-basis:100%}
   .search button{padding:11px}
-  #fform{flex-direction:row;flex-wrap:wrap}
-  #fform input{flex-basis:100%}
-  #fform #fgo{flex:1}
-  #fform #fclear{flex:none;width:48px}
+  .fform{flex-direction:row;flex-wrap:wrap}
+  .fform input{flex-basis:100%}
+  .fform button[type=submit]{flex:1}
+  .fform button.ghost{flex:none;width:48px}
+  .tabs{width:100%}
+  .tab{flex:1;padding:9px 6px;font-size:13px}
+  .vsbanner{gap:8px}
+  .vsp,.vsp.r{flex-direction:column;text-align:center;gap:6px}
+  .vsp img{width:48px;height:48px}
+  .vsp .nm{font-size:14px;max-width:110px}
+  .vsp .chip{border-radius:12px;font-size:11px;padding:4px 8px}
+  .cm .side span{white-space:normal}
+  .vsscore .sc{font-size:26px}
+  .duel{grid-template-columns:58px minmax(0,1fr) 92px minmax(0,1fr) 58px;gap:6px;font-size:12.5px}
+  .two{grid-template-columns:1fr}
+  .cm .side img{width:40px;height:23px}
   .items{margin-left:0}
   .hrow{grid-template-columns:minmax(0,1fr) 30px 84px 52px}
   .hrow .k{display:none}
@@ -210,6 +278,12 @@ body{overflow-x:hidden}
   </header>
   <div class="status" id="status"></div>
 
+  <nav class="tabs" id="tabs">
+    <button type="button" class="tab active" data-tab="main">Статистика</button>
+    <button type="button" class="tab" data-tab="vs">Сравнение с другом</button>
+  </nav>
+
+  <div id="tabMain">
   <div class="layout">
     <div class="col">
       <div class="card hidden" id="profileCard">
@@ -281,18 +355,33 @@ body{overflow-x:hidden}
 
   <div class="card compare hidden" id="cmpCard">
     <h2>Сравнение с другом</h2>
-    <form class="search" id="fform" autocomplete="off" style="min-width:0">
+    <form class="search fform" id="fform" autocomplete="off" style="min-width:0">
       <input id="fq" type="text" inputmode="url" placeholder="Ссылка на Dotabuff друга">
       <button type="submit" id="fgo">Сравнить</button>
       <button type="button" class="ghost hidden" id="fclear" title="Убрать друга">✕</button>
     </form>
     <div class="status" id="fstatus"></div>
     <div id="cmpOut"></div>
+    <button class="ghost morebtn hidden" id="toVs" type="button">Подробное сравнение →</button>
+  </div>
+  </div>
+
+  <div id="tabVs" class="hidden">
+    <div class="card" style="margin-bottom:12px">
+      <h2>Подробное сравнение с другом</h2>
+      <form class="search fform" id="fform2" autocomplete="off" style="min-width:0">
+        <input id="fq2" type="text" inputmode="url" placeholder="Ссылка на Dotabuff друга">
+        <button type="submit" id="fgo2">Сравнить</button>
+        <button type="button" class="ghost hidden" id="fclear2" title="Убрать друга">✕</button>
+      </form>
+      <div class="status" id="fstatus2"></div>
+    </div>
+    <div id="vsOut"></div>
   </div>
 
   <footer>
     Данные: <a href="https://www.opendota.com" target="_blank" rel="noopener">OpenDota API</a>.
-    Если игр нет — включи в Dota 2 «Публичный доступ к данным матчей». · версия 7
+    Если игр нет — включи в Dota 2 «Публичный доступ к данным матчей». · версия 8
   </footer>
 </div>
 
@@ -321,7 +410,7 @@ body{overflow-x:hidden}
   let heroes = null, itemIds = null;
   let main = null, friend = null, pendingVs = null;
   let reqToken = 0, friendToken = 0, debounce = null, fdebounce = null, heroesAll = false;
-  let anim = false;
+  let anim = false, tab = 'main';
 
   // ---------- анимации ----------
   function play(el, cls, delay) {
@@ -428,6 +517,7 @@ body{overflow-x:hidden}
     const url = new URL(location.href);
     if (main) url.searchParams.set('player', main.id);
     if (friend) url.searchParams.set('vs', friend.id); else url.searchParams.delete('vs');
+    if (tab === 'vs') url.searchParams.set('tab', 'vs'); else url.searchParams.delete('tab');
     history.replaceState(null, '', url);
   }
 
@@ -454,25 +544,47 @@ body{overflow-x:hidden}
     }
   }
 
+  function fstat(text, kind) { setStatus($('fstatus'), text, kind); setStatus($('fstatus2'), text, kind); }
+  function syncFriendUi() {
+    if (friend) { const v = 'https://www.dotabuff.com/players/' + friend.id; $('fq').value = v; $('fq2').value = v; }
+    ['fclear', 'fclear2', 'toVs'].forEach(id => $(id).classList.toggle('hidden', !friend));
+  }
+
   async function loadFriend(id) {
     const token = ++friendToken;
-    if (main && id === main.id) { setStatus($('fstatus'), 'Это тот же игрок — вставь ссылку друга.', 'err'); return; }
-    setStatus($('fstatus'), 'Загружаю друга…', 'load');
-    $('fgo').disabled = true;
+    if (main && id === main.id) { fstat('Это тот же игрок — вставь ссылку друга.', 'err'); return; }
+    fstat('Загружаю друга…', 'load');
+    $('fgo').disabled = $('fgo2').disabled = true;
     try {
       const d = await fetchPlayer(id);
       if (token !== friendToken) return;
-      if (!d) { setStatus($('fstatus'), 'Друг не найден или профиль скрыт.', 'err'); return; }
+      if (!d) { fstat('Друг не найден или профиль скрыт.', 'err'); return; }
       friend = d;
       updateUrl();
       renderCompare(true);
-      setStatus($('fstatus'), d.matches.length ? '' : 'У друга нет рейтинговых игр за 30 дней (или скрыты данные матчей).');
+      renderVs(tab === 'vs');
+      fstat(d.matches.length ? '' : 'У друга нет рейтинговых игр за 30 дней (или скрыты данные матчей).');
     } catch (e) {
       if (token !== friendToken) return;
-      setStatus($('fstatus'), e.message, 'err');
+      fstat(e.message, 'err');
     } finally {
-      if (token === friendToken) $('fgo').disabled = false;
+      if (token === friendToken) $('fgo').disabled = $('fgo2').disabled = false;
     }
+  }
+
+  function clearFriend() {
+    friend = null; friendToken++; $('fq').value = ''; $('fq2').value = ''; fstat('');
+    updateUrl(); renderCompare(); renderVs();
+  }
+
+  function setTab(name, animate) {
+    tab = name;
+    $('tabMain').classList.toggle('hidden', name !== 'main');
+    $('tabVs').classList.toggle('hidden', name !== 'vs');
+    document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+    updateUrl();
+    if (name === 'vs') renderVs(animate);
+    else if (animate && main) animatePage();
   }
 
   // ---------- расчёты ----------
@@ -623,6 +735,7 @@ body{overflow-x:hidden}
     renderHeroes();
     renderTime();
     renderCompare(anim);
+    renderVs(anim && tab === 'vs');
     ['profileCard', 'stats', 'chartCard', 'heroCard', 'timeCard', 'cmpCard'].forEach(id => $(id).classList.remove('hidden'));
     if (anim) animatePage();
     anim = false;
@@ -782,7 +895,7 @@ body{overflow-x:hidden}
 
   function renderCompare(animate) {
     const out = $('cmpOut');
-    $('fclear').classList.toggle('hidden', !friend);
+    syncFriendUi();
     if (!main || !friend) {
       out.innerHTML = '<div class="note">Вставь ссылку на профиль друга — покажу, кто апает больше, и ваши общие игры.</div>';
       return;
@@ -844,6 +957,207 @@ body{overflow-x:hidden}
     }
   }
 
+  // ---------- подробное сравнение (вкладка) ----------
+  function extra(d) {
+    const ms = d.matches;
+    const avg = f => { const v = ms.map(m => m[f]).filter(num); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; };
+    const wr = arr => arr.length ? arr.filter(isWin).length / arr.length : null;
+    const tod = [0, 1, 2, 3].map(() => ({ g: 0, w: 0 }));
+    for (const m of ms) { const b = tod[Math.floor(new Date(m.start_time * 1000).getHours() / 6)]; b.g++; if (isWin(m)) b.w++; }
+    return {
+      k: avg('kills'), de: avg('deaths'), as: avg('assists'), dn: avg('denies'), dur: avg('duration'),
+      rad: wr(ms.filter(m => m.player_slot < 128)), dire: wr(ms.filter(m => m.player_slot >= 128)),
+      pool: new Set(ms.map(m => m.hero_id)).size,
+      days: new Set(ms.map(m => new Date(m.start_time * 1000).toDateString())).size,
+      tod
+    };
+  }
+
+  // строка-дуэль: значение A | полоса | название | полоса | значение B. better: 1 — больше лучше, -1 — меньше лучше, 0 — не сравнивать
+  function duel(label, ta, tb, va, vb, better, sub) {
+    const na = num(va), nb = num(vb);
+    let wa = 0, wb = 0;
+    if (na || nb) {
+      const lo = Math.min(na ? va : Infinity, nb ? vb : Infinity);
+      if (na && nb && lo < 0) { // есть отрицательные: меньшему 12%, большему 100%
+        const hi = Math.max(va, vb), span = hi - lo || 1;
+        wa = 12 + (va - lo) / span * 88; wb = 12 + (vb - lo) / span * 88;
+        if (va === vb) wa = wb = 60;
+      } else {
+        const max = Math.max(na ? Math.abs(va) : 0, nb ? Math.abs(vb) : 0) || 1;
+        wa = na ? Math.abs(va) / max * 100 : 0; wb = nb ? Math.abs(vb) / max * 100 : 0;
+      }
+    }
+    const win = better && na && nb && va !== vb ? (((va > vb) === (better > 0)) ? 'a' : 'b') : null;
+    const html = `<div class="duel">
+      <div class="v l ${win === 'a' ? 'best' : ''}">${ta}</div>
+      <div class="dbar l"><i style="width:${wa.toFixed(0)}%"></i></div>
+      <div class="lab">${label}${sub ? `<small>${sub}</small>` : ''}</div>
+      <div class="dbar r"><i style="width:${wb.toFixed(0)}%"></i></div>
+      <div class="v ${win === 'b' ? 'best' : ''}">${tb}</div></div>`;
+    return { html, win };
+  }
+
+  function vsChart(a, b, animate) {
+    const now = Date.now() / 1000, from = now - 30 * 86400;
+    const series = d => {
+      const ms = d.matches.filter(m => m.start_time >= from).sort((x, y) => x.start_time - y.start_time);
+      let c = 0; const pts = [[from, 0]];
+      for (const m of ms) { c += ptsFor(isWin(m), d.rankTier); pts.push([m.start_time, c]); }
+      pts.push([now, c]);
+      return pts;
+    };
+    const sa = series(a), sb = series(b);
+    const all = sa.concat(sb).map(p => p[1]);
+    let lo = Math.min(0, ...all), hi = Math.max(0, ...all);
+    if (hi - lo < 50) { hi += 25; lo -= 25; }
+    const W = 600, H = 210, L = 40, R = 10, T = 12, B = 22;
+    const X = t => L + (t - from) / (now - from) * (W - L - R);
+    const Y = v => T + (hi - v) / (hi - lo) * (H - T - B);
+    const path = s => s.map((p, i) => i ? `H${X(p[0]).toFixed(1)}V${Y(p[1]).toFixed(1)}` : `M${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join('');
+    let xl = '';
+    for (let i = 0; i <= 5; i++) {
+      const t = from + i * (now - from) / 5;
+      const date = new Date(t * 1000).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+      xl += `<text x="${X(t).toFixed(1)}" y="${H - 5}" text-anchor="${i === 0 ? 'start' : i === 5 ? 'end' : 'middle'}" font-size="10" fill="var(--muted)">${date}</text>`;
+    }
+    const yl = [hi, 0, lo].filter((v, i, arr) => arr.indexOf(v) === i).map(v =>
+      `<text x="${L - 6}" y="${(Y(v) + 3).toFixed(1)}" text-anchor="end" font-size="10" fill="var(--muted)">${signed(v)}</text>`).join('');
+    const line = (s, color) => `<path d="${path(s)}" pathLength="1" class="${animate ? 'draw' : ''}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+      <circle cx="${X(now).toFixed(1)}" cy="${Y(s[s.length - 1][1]).toFixed(1)}" r="3.5" fill="${color}"/>`;
+    return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="ПТС нарастающим итогом" style="width:100%;height:auto;display:block">
+      <line x1="${L}" x2="${W - R}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--muted)" stroke-opacity=".45" stroke-dasharray="4 4"/>
+      ${yl}${xl}${line(sb, 'var(--pb)')}${line(sa, 'var(--pa)')}</svg>`;
+  }
+
+  function renderVs(animate) {
+    const out = $('vsOut');
+    syncFriendUi();
+    if (!main) { out.innerHTML = '<div class="card empty">Сначала вставь свою ссылку Dotabuff в поле сверху.</div>'; return; }
+    if (!friend) {
+      out.innerHTML = '<div class="card empty">Вставь ссылку друга — здесь появится подробное сравнение: счёт по показателям, график ПТС за 30 дней, герои, время суток и все ваши общие игры.</div>';
+      return;
+    }
+    const A = main, B = friend, a = summary(A), b = summary(B), ea = extra(A), eb = extra(B);
+    const nameA = esc(A.profile.personaname || 'Игрок ' + A.id), nameB = esc(B.profile.personaname || 'Игрок ' + B.id);
+    const f0 = v => v === null ? '—' : Math.round(v), f1 = v => v === null ? '—' : v.toFixed(1);
+    const durTxt = v => v === null ? '—' : dur(Math.round(v));
+
+    const ptsRows = [
+      duel('≈ПТС за 24 часа', signed(a.p[0].pts), signed(b.p[0].pts), a.p[0].pts, b.p[0].pts, 1, `${a.p[0].w + a.p[0].l} и ${b.p[0].w + b.p[0].l} игр`),
+      duel('≈ПТС за 7 дней', signed(a.p[1].pts), signed(b.p[1].pts), a.p[1].pts, b.p[1].pts, 1, `${a.p[1].w + a.p[1].l} и ${b.p[1].w + b.p[1].l} игр`),
+      duel('≈ПТС за 30 дней', signed(a.p[2].pts), signed(b.p[2].pts), a.p[2].pts, b.p[2].pts, 1, `${a.games} и ${b.games} игр`)
+    ];
+    const rows = [
+      duel('Винрейт', pct(a.wr), pct(b.wr), a.wr, b.wr, 1, `${a.wins}W–${a.games - a.wins}L · ${b.wins}W–${b.games - b.wins}L`),
+      duel('Средний KDA', f1(a.kda), f1(b.kda), a.kda, b.kda, 1),
+      duel('Убийств за игру', f1(ea.k), f1(eb.k), ea.k, eb.k, 1),
+      duel('Смертей за игру', f1(ea.de), f1(eb.de), ea.de, eb.de, -1, 'меньше — лучше'),
+      duel('Помощи за игру', f1(ea.as), f1(eb.as), ea.as, eb.as, 1),
+      duel('GPM', f0(a.gpm), f0(b.gpm), a.gpm, b.gpm, 1),
+      duel('XPM', f0(a.xpm), f0(b.xpm), a.xpm, b.xpm, 1),
+      duel('Добито крипов', f0(a.lh), f0(b.lh), a.lh, b.lh, 1),
+      duel('Денаев за игру', f1(ea.dn), f1(eb.dn), ea.dn, eb.dn, 1),
+      duel('Лучшая серия побед', a.best, b.best, a.best, b.best, 1),
+      duel('Винрейт за Свет', pct(ea.rad), pct(eb.rad), ea.rad, eb.rad, 1),
+      duel('Винрейт за Тьму', pct(ea.dire), pct(eb.dire), ea.dire, eb.dire, 1),
+      duel('Игр за 30 дней', a.games, b.games, a.games, b.games, 0),
+      duel('Игровых дней', ea.days, eb.days, ea.days, eb.days, 0),
+      duel('Средняя игра', durTxt(ea.dur), durTxt(eb.dur), ea.dur, eb.dur, 0, 'минуты'),
+      duel('Разных героев', ea.pool, eb.pool, ea.pool, eb.pool, 0)
+    ];
+    const scored = ptsRows.concat(rows);
+    const scA = scored.filter(r => r.win === 'a').length, scB = scored.filter(r => r.win === 'b').length;
+
+    // баннер
+    const chip = s => s ? `<span class="chip ${s.n >= 2 ? (s.win ? 'hot' : 'cold') : ''}">${streakText(s)}</span>` : '';
+    const side = (d, name, sum, cl, r) => `<div class="vsp ${r}">
+      <img src="${esc(d.profile.avatarfull || d.profile.avatarmedium || '')}" alt="" ${imgFallback}>
+      <div><div class="nm"><i class="dot ${cl}"></i>${name}</div>
+        <div class="meta">${medalText(d.rankTier, d.lbRank)}</div>${chip(sum.streak)}</div></div>`;
+    const pa = a.p[2].pts, pb = b.p[2].pts;
+    const verdict = pa === pb
+      ? `За 30 дней вы апнули поровну: ≈${signed(pa)} ПТС.`
+      : `За 30 дней больше апнул <b>${pa > pb ? nameA : nameB}</b>: ≈${signed(Math.max(pa, pb))} против ≈${signed(Math.min(pa, pb))} ПТС (разница ${Math.abs(pa - pb)}).`;
+    const banner = `<div class="card vsbanner" id="vsBanner">
+      ${side(A, nameA, a, 'a', '')}
+      <div class="vsscore"><div class="sc"><span class="${scA > scB ? 'pos' : ''}">${scA}</span> : <span class="${scB > scA ? 'pos' : ''}">${scB}</span></div>
+        <div class="meta">счёт по ${scored.length} показателям</div></div>
+      ${side(B, nameB, b, 'b', 'r')}
+      <div class="verdict">${verdict}</div></div>`;
+
+    // герои
+    const hsA = heroStats(A), hsB = heroStats(B);
+    const topList = hs => hs.sort((x, y) => y.games - x.games || y.pts - x.pts).slice(0, 5).map(h => {
+      const wr = h.w / h.games;
+      return `<div class="mini"><img src="${esc(heroImg(h.id))}" alt="" loading="lazy" ${imgFallback}>
+        <span class="n">${esc(heroName(h.id))}</span><span class="muted">${h.games} · <span class="${wrCls(wr)}">${pct(wr)}</span></span>
+        <span class="p ${cls(h.pts)}">${signed(h.pts)}</span></div>`;
+    }).join('') || '<div class="note">Нет игр.</div>';
+    const mapB = new Map(hsB.map(h => [h.id, h]));
+    const common = hsA.filter(h => mapB.has(h.id)).map(h => ({ a: h, b: mapB.get(h.id) }))
+      .sort((x, y) => (y.a.games + y.b.games) - (x.a.games + x.b.games)).slice(0, 6);
+    const hcell = h => { const wr = h.w / h.games; return `<span><b class="${wrCls(wr)}">${pct(wr)}</b> · ${h.games} ${plural(h.games, ['игра', 'игры', 'игр'])} · <b class="${cls(h.pts)}">${signed(h.pts)}</b></span>`; };
+    const commonHtml = common.length ? common.map(c => `<div class="cm">
+        <div class="side">${hcell(c.a)}</div>
+        <div class="mid"><img src="${esc(heroImg(c.a.id))}" alt="" loading="lazy" ${imgFallback}>${esc(heroName(c.a.id))}</div>
+        <div class="side r">${hcell(c.b)}</div></div>`).join('')
+      : '<div class="note">Общих героев за 30 дней нет.</div>';
+
+    // время суток
+    const TOD = [['Ночь', '0–6'], ['Утро', '6–12'], ['День', '12–18'], ['Вечер', '18–24']];
+    const todRows = TOD.map(([n, r], i) => {
+      const x = ea.tod[i], y = eb.tod[i];
+      const t = z => z.g ? `${pct(z.w / z.g)} <small>${z.g}</small>` : '—';
+      return duel(n, t(x), t(y), x.g ? x.w / x.g : null, y.g ? y.w / y.g : null, x.g >= 3 && y.g >= 3 ? 1 : 0, r).html;
+    }).join('');
+
+    // общие игры
+    const fm = new Map(B.matches.map(m => [m.match_id, m]));
+    let same = 0, sw = 0, vs = 0, vw = 0; const list = [];
+    for (const m of A.matches) {
+      const f = fm.get(m.match_id);
+      if (!f) continue;
+      const win = isWin(m), together = (m.player_slot < 128) === (f.player_slot < 128);
+      if (together) { same++; if (win) sw++; } else { vs++; if (win) vw++; }
+      if (list.length < 12) list.push({ m, f, win, together });
+    }
+    const pl = (m, r) => `<div class="side ${r}"><img src="${esc(heroImg(m.hero_id))}" alt="" loading="lazy" ${imgFallback}>
+      <span><b>${m.kills}/${m.deaths}/${m.assists}</b><br><span class="muted">${esc(heroName(m.hero_id))}</span></span></div>`;
+    const gamesHtml = list.length ? list.map(({ m, f, win, together }) => `<a class="cm" href="https://www.dotabuff.com/matches/${m.match_id}" target="_blank" rel="noopener">
+        ${pl(m, '')}
+        <div class="mid"><div class="res ${win ? 'pos' : 'neg'}">${together ? (win ? 'Вместе · победа' : 'Вместе · поражение') : (win ? 'Против · победил ты' : 'Против · победил друг')}</div>
+          <div class="muted">${dur(m.duration)} · ${ago(m.start_time)}</div></div>
+        ${pl(f, 'r')}</a>`).join('')
+      : '<div class="note">За 30 дней общих рейтинговых игр нет.</div>';
+    const gamesSum = (same || vs) ? `<div class="legend">
+        <span>В одной команде: <b class="${same ? wrCls(sw / same) : ''}">${same ? `${sw}W–${same - sw}L (${pct(sw / same)})` : '—'}</b></span>
+        <span>Друг против друга: <b>${vs ? `${vw} : ${vs - vw}` : '—'}</b></span></div>` : '';
+
+    const legend = `<div class="legend"><span><i class="dot a"></i>${nameA}</span><span><i class="dot b"></i>${nameB}</span></div>`;
+    out.innerHTML = banner + `<div class="layout">
+      <div class="col" id="vsL">
+        <div class="card"><h2>Кто сколько апнул</h2>${legend}${ptsRows.map(r => r.html).join('')}</div>
+        <div class="card"><h2>≈ПТС нарастающим итогом · 30 дней</h2>${legend}${vsChart(A, B, animate)}
+          <div class="cap">Линия идёт вверх после побед и вниз после поражений. Цифры приблизительные.</div></div>
+        <div class="card"><h2>Герои · 30 дней</h2>
+          <div class="two"><div><h3><i class="dot a"></i>${nameA}</h3>${topList(hsA.slice())}</div>
+            <div><h3><i class="dot b"></i>${nameB}</h3>${topList(hsB.slice())}</div></div>
+          <div class="subh">Общие герои: винрейт · игры · ≈ПТС</div>${commonHtml}</div>
+      </div>
+      <div class="col" id="vsR">
+        <div class="card"><h2>Показатели · 30 дней</h2>${legend}${rows.map(r => r.html).join('')}</div>
+        <div class="card"><h2>Винрейт по времени суток</h2>${legend}${todRows}
+          <div class="cap">Маленькая цифра — число игр. Лучший отмечается, если у обоих от 3 игр в промежутке.</div></div>
+        <div class="card"><h2>Общие игры · 30 дней</h2>${gamesSum}${gamesHtml}</div>
+      </div></div>`;
+    if (animate) {
+      play($('vsBanner'), 'a-u', 0);
+      playAll('#vsL > .card', 'a-l', 120, 110);
+      playAll('#vsR > .card', 'a-r', 120, 110);
+    }
+  }
+
   // ---------- события ----------
   function bindInput(input, getCurrent, onLoad, statusEl, setDeb) {
     function tryLoad(immediate) {
@@ -864,12 +1178,14 @@ body{overflow-x:hidden}
   }
   const mainTry = bindInput($('q'), () => main, load, $('status'), t => { clearTimeout(debounce); debounce = t; });
   const friendTry = bindInput($('fq'), () => friend, loadFriend, $('fstatus'), t => { clearTimeout(fdebounce); fdebounce = t; });
+  const friendTry2 = bindInput($('fq2'), () => friend, loadFriend, $('fstatus2'), t => { clearTimeout(fdebounce); fdebounce = t; });
   $('form').addEventListener('submit', e => { e.preventDefault(); mainTry(true); });
   $('fform').addEventListener('submit', e => { e.preventDefault(); friendTry(true); });
-  $('fclear').addEventListener('click', () => {
-    friend = null; friendToken++; $('fq').value = ''; setStatus($('fstatus'), '');
-    updateUrl(); renderCompare();
-  });
+  $('fform2').addEventListener('submit', e => { e.preventDefault(); friendTry2(true); });
+  $('fclear').addEventListener('click', clearFriend);
+  $('fclear2').addEventListener('click', clearFriend);
+  document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () => { if (tab !== b.dataset.tab) setTab(b.dataset.tab, true); }));
+  $('toVs').addEventListener('click', () => { setTab('vs', true); window.scrollTo({ top: 0, behavior: 'smooth' }); });
   $('heroMore').addEventListener('click', () => {
     heroesAll = !heroesAll; renderHeroes();
     if (heroesAll) playAll(`#heroes .hrow:nth-child(n+${HERO_SHOW + 2})`, 'a-l', 0, 45);
@@ -909,34 +1225,42 @@ body{overflow-x:hidden}
   });
   fillSettings();
 
-  // хаотичное движение светящихся пятен
+  // плавное хаотичное движение светящихся пятен:
+  // каждое пятно медленно плывёт к случайной скорости и раз в 9–18 секунд выбирает новое направление
   (function wander() {
     const rnd = (a, b) => a + Math.random() * (b - a);
+    const retarget = (p, now) => {
+      const ang = rnd(0, Math.PI * 2), sp = rnd(8, 30);
+      p.tvx = Math.cos(ang) * sp; p.tvy = Math.sin(ang) * sp;
+      p.scT = rnd(0.88, 1.22);
+      p.next = now + rnd(9000, 18000);
+    };
+    const t0 = performance.now();
     const blobs = [...document.querySelectorAll('.glow span')].map(el => {
       const s = el.offsetWidth || 400;
-      return { el, s, x: rnd(-s / 2, innerWidth - s / 2), y: rnd(-s / 2, innerHeight - s / 2),
-        vx: rnd(-60, 60), vy: rnd(-60, 60), max: rnd(70, 150), sc: 1, scT: 1 };
+      const p = { el, s, x: rnd(-s / 2, innerWidth - s / 2), y: rnd(-s / 2, innerHeight - s / 2), sc: 1 };
+      retarget(p, t0);
+      p.vx = p.tvx; p.vy = p.tvy;
+      p.next = t0 + rnd(3000, 18000);
+      return p;
     });
-    let last = performance.now();
+    let last = t0;
     function tick(now) {
       const dt = Math.min(0.05, (now - last) / 1000); last = now;
       const W = innerWidth, H = innerHeight;
+      const kv = 1 - Math.exp(-dt * 0.3), ks = 1 - Math.exp(-dt * 0.12);
       for (const p of blobs) {
-        // случайные толчки + редкие резкие смены направления
-        p.vx += rnd(-1, 1) * 420 * dt;
-        p.vy += rnd(-1, 1) * 420 * dt;
-        if (Math.random() < 0.006) { p.vx += rnd(-220, 220); p.vy += rnd(-220, 220); p.scT = rnd(0.8, 1.3); }
-        const sp = Math.hypot(p.vx, p.vy);
-        if (sp > p.max) { p.vx *= p.max / sp; p.vy *= p.max / sp; }
-        p.x += p.vx * dt; p.y += p.vy * dt;
-        // отскок от краёв экрана (пятно может наполовину уходить за край)
+        if (now > p.next) retarget(p, now);
+        // у краёв мягко разворачиваем к центру (без резкого отскока)
         const minX = -p.s * 0.55, maxX = W - p.s * 0.45, minY = -p.s * 0.55, maxY = H - p.s * 0.45;
-        if (p.x < minX) { p.x = minX; p.vx = Math.abs(p.vx); }
-        if (p.x > maxX) { p.x = maxX; p.vx = -Math.abs(p.vx); }
-        if (p.y < minY) { p.y = minY; p.vy = Math.abs(p.vy); }
-        if (p.y > maxY) { p.y = maxY; p.vy = -Math.abs(p.vy); }
-        p.sc += (p.scT - p.sc) * Math.min(1, dt * 0.8);
-        p.el.style.transform = `translate3d(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px,0) scale(${p.sc.toFixed(3)})`;
+        if (p.x < minX) p.tvx = Math.abs(p.tvx) || 12;
+        if (p.x > maxX) p.tvx = -(Math.abs(p.tvx) || 12);
+        if (p.y < minY) p.tvy = Math.abs(p.tvy) || 12;
+        if (p.y > maxY) p.tvy = -(Math.abs(p.tvy) || 12);
+        p.vx += (p.tvx - p.vx) * kv; p.vy += (p.tvy - p.vy) * kv;
+        p.x += p.vx * dt; p.y += p.vy * dt;
+        p.sc += (p.scT - p.sc) * ks;
+        p.el.style.transform = `translate3d(${p.x.toFixed(2)}px,${p.y.toFixed(2)}px,0) scale(${p.sc.toFixed(4)})`;
       }
       requestAnimationFrame(tick);
     }
@@ -946,6 +1270,7 @@ body{overflow-x:hidden}
   // открыть по ссылке ?player=ID&vs=ID
   const params = new URLSearchParams(location.search);
   const pre = params.get('player'), vsId = params.get('vs');
+  if (params.get('tab') === 'vs') setTab('vs', false); else renderVs(false);
   if (vsId && /^\d+$/.test(vsId)) pendingVs = vsId;
   if (pre && /^\d+$/.test(pre)) {
     $('q').value = 'https://www.dotabuff.com/players/' + pre;
